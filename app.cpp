@@ -19,19 +19,20 @@ int main()
     serial->Write(message_to_send);
 
     std::cout << "sending message to serial:" << std::endl;
-    for(int i(0); i < 5; ++i)
+    for(int i(0); i < 4; ++i)
     {
         sprintf(convert_buffer, "%x", message_to_send[i]);
         std::cout << convert_buffer << std::endl;
     }
-
-    serial->Close();
+    std::cout << std::endl;
 
     for(;;)
     {
         char *received_message = serial->Read(100);
-        std::cout << "receive message from serial: " << received_message << std::endl;
+        std::cout << "receiving message from serial: " << received_message << std::endl;
     }
+
+    serial->Close();
 
     // delete terminal;
     delete serial;
