@@ -56,7 +56,7 @@ bool Serial::Open(const char* port_name)
 
     ioctl(m_fd, TIOCMSET, &status);
 
-    usleep(10000); //10ms
+    usleep(2000000); //2s
 
     // set_blocking(m_fd, 0); //set no blocking
 
@@ -72,7 +72,7 @@ void Serial::Write(const byte message[5])
 {
     // byte *data;
     // strcpy(data, message);
-    // strcat(data, "\n");
+    // strcat(data, '\n');
     // int data_length = sizeof(message);
 
     write(m_fd, message, 5);     //send message
