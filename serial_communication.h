@@ -12,7 +12,7 @@ public:
     ~Serial();
 
     bool Open(const char* port_name);
-    void Write(char* message);
+    void Write(const char* message);
     char* Read(int buffer_length);
 
 private:

@@ -17,14 +17,14 @@ bool Serial::Open(const char* port_name)
         return false;
     }
 
-    set_interface_attribs(m_fd, B115200, 0); //set speed to 115, 200 bps, 8n1 (no parity)
+    set_interface_attribs(m_fd, B9600, 0); //set speed to 115, 200 bps, 8n1 (no parity)
     set_blocking(m_fd, 0); //set no blocking
                            //receive 25: approx 100 uS per char transmit
 
     return true;
 }
 
-void Serial::Write(char* message)
+void Serial::Write(const char* message)
 {
     char *data;
     strcpy(data, message);
