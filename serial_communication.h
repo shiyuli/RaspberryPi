@@ -19,6 +19,7 @@ public:
     bool Open(const char* port_name);
     void Write(const byte message[5]);
     char* Read(int buffer_length);
+    void Close();
 
 private:
     int m_fd;

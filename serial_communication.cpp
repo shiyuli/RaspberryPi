@@ -55,12 +55,17 @@ bool Serial::Open(const char* port_name)
     status |= TIOCM_RTS;
 
     ioctl(m_fd, TIOCMSET, &status);
-    
+
     usleep(10000); //10ms
 
     // set_blocking(m_fd, 0); //set no blocking
 
     return true;
+}
+
+void Serial::Close()
+{
+    close(m_fd);
 }
 
 void Serial::Write(const byte message[5])

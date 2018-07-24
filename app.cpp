@@ -23,6 +23,8 @@ int main()
         std::cout << message_to_send[i] << std::endl;
     }
 
+    serial->Close();
+
     // char *received_message = serial->Read(100);
     // std::cout << "receive message from serial: " << received_message << std::endl;
 
