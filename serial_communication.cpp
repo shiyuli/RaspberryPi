@@ -24,15 +24,15 @@ bool Serial::Open(const char* port_name)
     return true;
 }
 
-void Serial::Write(const char* message)
+void Serial::Write(const byte message[5])
 {
-    char *data;
-    strcpy(data, message);
-    strcat(data, "\n");
-    int data_length = sizeof(data);
+    // byte *data;
+    // strcpy(data, message);
+    // strcat(data, "\n");
+    // int data_length = sizeof(message);
 
-    write(m_fd, data, data_length);     //send message
-    usleep((data_length + 25) * 100); //sleep enough to transmit the message
+    write(m_fd, message, 5);     //send message
+    usleep((5 + 25) * 100); //sleep enough to transmit the message
 }
 
 char* Serial::Read(int buffer_length)

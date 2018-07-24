@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
+typedef unsigned char byte;
+
 class Serial
 {
 public:
@@ -12,7 +14,7 @@ public:
     ~Serial();
 
     bool Open(const char* port_name);
-    void Write(const char* message);
+    void Write(const byte message[5]);
     char* Read(int buffer_length);
 
 private:
