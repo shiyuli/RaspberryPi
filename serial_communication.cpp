@@ -12,6 +12,7 @@ bool Serial::Open(const char* port_name)
 {
     struct termios options;
     memset(&options, 0, sizeof(options));
+    int status;
 
     if((m_fd = open(port_name, O_RDWR | O_NDELAY | O_NONBLOCK)) == -1)
     {
@@ -19,7 +20,7 @@ bool Serial::Open(const char* port_name)
         return false;
     }
 
-    fcntl(fd, F_SETFL, O_RDWR);
+    fcntl(m_fd, F_SETFL, O_RDWR);
 
     if(tcgetattr(m_fd, &options) != 0)
     {
@@ -44,11 +45,17 @@ bool Serial::Open(const char* port_name)
 
     if(tcsetattr(m_fd, TCSANOW, &options) != 0)
     {
-        printf("error %d from tcsetattr", errno);
+        // printf("error %d from tcsetattr", errno);
         return false;
     }
 
     ioctl(m_fd, TIOCMGET, &status);
+
+    status |= TIOCM_DTR;
+    status |= TIOCM_RTS;
+
+    ioctl(m_fd, TIOCMSET, &status);
+    
     usleep(10000); //10ms
 
     // set_blocking(m_fd, 0); //set no blocking
