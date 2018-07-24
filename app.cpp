@@ -10,12 +10,9 @@ int main()
     const char *port_name = "/dev/bus/usb/001/006"; //001~006
     serial->Open(port_name);
 
-    const byte message_to_send[5];
-    message_to_send[0] = 0x00;
-    message_to_send[1] = 0x00;
-    message_to_send[2] = 0x00;
-    message_to_send[3] = 0x01;
-    message_to_send[4] = (byte)"\n";
+    const byte message_to_send[5] = {
+        0x00, 0x00, 0x00, 0x01, (byte)"\n"
+    };
     serial->Write(message_to_send);
     std::cout << "sending message to serial: " << message_to_send << std::endl;
 
