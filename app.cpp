@@ -11,10 +11,15 @@ int main()
     serial->Open(port_name);
 
     const byte message_to_send[5] = {
-        0x00, 0x00, 0x00, 0x01, (byte)"\n"
+        0x00, 0x00, 0x00, 0x01, (byte)'\n'
     };
     serial->Write(message_to_send);
-    std::cout << "sending message to serial: " << message_to_send << std::endl;
+
+    std::cout << "sending message to serial:" << std::endl;
+    for(int i(0); i < 5; ++i)
+    {
+        std::cout << message_to_send[i] << std::endl;
+    }
 
     // char *received_message = serial->Read(100);
     // std::cout << "receive message from serial: " << received_message << std::endl;
