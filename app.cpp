@@ -7,7 +7,7 @@ int main()
     std::cout << "run app" << std::endl;
 
     Serial *serial = new Serial();
-    const char *port_name = "/dev/bus/usb/001/006"; //001~006
+    const char *port_name = "/dev/ttyACM0";
     serial->Open(port_name);
 
     int number = 1;
