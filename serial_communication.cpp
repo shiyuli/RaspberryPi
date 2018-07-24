@@ -26,8 +26,10 @@ bool Serial::Open(const char* port_name)
 
 void Serial::Write(char* message)
 {
-    char *data = message + "\n";
-    int data_length = sizeof(message) + 1;
+    char *data;
+    strcpy(data, message);
+    strcat(data, "\n");
+    int data_length = sizeof(data);
 
     write(m_fd, data, data_length);     //send message
     usleep((data_length + 25) * 100); //sleep enough to transmit the message
@@ -60,7 +62,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
     cfsetospeed(&tty, speed);
     cfsetispeed(&tty, speed);
 
-    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CSB; //8-bit chars
+    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8; //8-bit chars
     //disable IGNBRK for mismatched speed tests, otherwise receive break
     //as \000 chars
     tty.c_iflag &= ~IGNBRK; //disable break processing
