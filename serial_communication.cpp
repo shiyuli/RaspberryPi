@@ -10,16 +10,48 @@ Serial::~Serial()
 
 bool Serial::Open(const char* port_name)
 {
-    m_fd = open(port_name, O_RDWR | O_NOCTTY | O_SYNC);
-    if(m_fd < 0)
+    struct termios options;
+    memset(&options, 0, sizeof(options));
+
+    if((m_fd = open(port_name, O_RDWR | O_NDELAY | O_NONBLOCK)) == -1)
     {
         // printf("error %d opening %s: %s", errno, port_name, strerror(errno));
         return false;
     }
 
-    set_interface_attribs(m_fd, B9600, 0); //set speed to 115, 200 bps, 8n1 (no parity)
-    set_blocking(m_fd, 0); //set no blocking
-                           //receive 25: approx 100 uS per char transmit
+    fcntl(fd, F_SETFL, O_RDWR);
+
+    if(tcgetattr(m_fd, &options) != 0)
+    {
+        // printf("error %d from tcgetattr", errno);
+        return false;
+    }
+
+    cfmakeraw(&options);
+    cfsetispeed(&options, B9600);
+    cfsetospeed(&options, B9600);
+
+    options.c_cflag |= (CLOCAL | CREAD);        //ignore modem controls,
+    options.c_cflag &= ~PARENB;      //shut off parity
+    options.c_cflag &= ~CSTOPB;
+    options.c_cflag &= ~CSIZE;
+    options.c_cflag |= CS8;
+    options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    options.c_oflag &= ~OPOST;
+
+    options.c_cc[VMIN] = 0;    //read doesn't block
+    options.c_cc[VTIME] = 100; //10 seconds read timeout
+
+    if(tcsetattr(m_fd, TCSANOW, &options) != 0)
+    {
+        printf("error %d from tcsetattr", errno);
+        return false;
+    }
+
+    ioctl(m_fd, TIOCMGET, &status);
+    usleep(10000); //10ms
+
+    // set_blocking(m_fd, 0); //set no blocking
 
     return true;
 }
@@ -46,64 +78,4 @@ char* Serial::Read(int buffer_length)
     int n = read(m_fd, message, sizeof(message)); //read up to 100 characters if ready to read
 
     return message;
-}
-
-int Serial::set_interface_attribs(int fd, int speed, int parity)
-{
-    struct termios tty;
-    memset(&tty, 0, sizeof(tty));
-
-    if(tcgetattr(fd, &tty) != 0)
-    {
-        // printf("error %d from tcgetattr", errno);
-        return -1;
-    }
-
-    cfsetospeed(&tty, speed);
-    cfsetispeed(&tty, speed);
-
-    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8; //8-bit chars
-    //disable IGNBRK for mismatched speed tests, otherwise receive break
-    //as \000 chars
-    tty.c_iflag &= ~IGNBRK; //disable break processing
-    tty.c_lflag = 0;        //no signaling char, no echo
-                            //nocaonical processing
-    tty.c_oflag = 0;        //no remapping, no delays
-    tty.c_cc[VMIN] = 0;     //read doesn't block
-    tty.c_cc[VTIME] = 5;    //0.5 seconds read timeout
-
-    tty.c_iflag &= ~(IXON | IXOFF | IXANY); //shut off xon/xoff ctrl
-    tty.c_cflag |= (CLOCAL | CREAD);        //ignore modem controls,
-                                            //enable reading
-    tty.c_cflag &= ~(PARENB | PARODD);      //shut off parity
-    tty.c_cflag |= parity;
-    tty.c_cflag &= ~CSTOPB;
-    tty.c_cflag &= ~CRTSCTS;
-
-    if(tcsetattr(fd, TCSANOW, &tty) != 0)
-    {
-        printf("error %d from tcsetattr", errno);
-        return -1;
-    }
-
-    return 0;
-}
-
-void Serial::set_blocking(int fd, int should_block)
-{
-    struct termios tty;
-    memset(&tty, 0, sizeof(tty));
-    if(tcgetattr(fd, &tty) != 0)
-    {
-        // printf("error %d from tggetattr", errno);
-        return;
-    }
-
-    tty.c_cc[VMIN] = should_block ? 1 : 0;
-    tty.c_cc[VTIME] = 5; //0.5 seconds read timeout
-
-    if(tcsetattr(fd, TCSANOW, &tty) != 0)
-    {
-        // printf("error %d setting term attributes", errno);
-    }
 }

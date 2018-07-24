@@ -4,6 +4,9 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
+// #include <sys/types.h>
+// #include <sys/stat.h>
 
 typedef unsigned char byte;
 
@@ -16,10 +19,6 @@ public:
     bool Open(const char* port_name);
     void Write(const byte message[5]);
     char* Read(int buffer_length);
-
-private:
-    int set_interface_attribs(int fd, int speed, int parity);
-    void set_blocking(int fd, int should_block);
 
 private:
     int m_fd;
