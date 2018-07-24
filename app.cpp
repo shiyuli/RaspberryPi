@@ -10,7 +10,7 @@ int main()
     serial->Open(port_name);
 
     char *message_to_send = "";
-    message_to_send << std::cin;
+    std::cin >> message_to_send;
     serial->Write(message_to_send);
 
     char *received_message = serial->Read(100);
