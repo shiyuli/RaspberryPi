@@ -10,9 +10,9 @@ public:
     Serial();
     ~Serial();
 
-    void open(char* port_name);
-    void write(char* message);
-    char* read(int buffer_length);
+    bool Open(const char* port_name);
+    void Write(char* message);
+    char* Read(int buffer_length);
 
 private:
     int set_interface_attribs(int fd, int speed, int parity);

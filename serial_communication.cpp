@@ -8,30 +8,32 @@ Serial::~Serial()
 {
 }
 
-bool Serial::open(char* port_name)
+bool Serial::Open(const char* port_name)
 {
     m_fd = open(port_name, O_RDWR | O_NOCTTY | O_SYNC);
     if(m_fd < 0)
     {
-        printf("error %d opening %s: %s", errno, port_name, strerror(errno));
-        return;
+        // printf("error %d opening %s: %s", errno, port_name, strerror(errno));
+        return false;
     }
 
     set_interface_attribs(m_fd, B115200, 0); //set speed to 115, 200 bps, 8n1 (no parity)
     set_blocking(m_fd, 0); //set no blocking
                            //receive 25: approx 100 uS per char transmit
+
+    return true;
 }
 
-void Serial::write(char* message)
+void Serial::Write(char* message)
 {
-    char *data = message += "\n";
+    char *data = message + "\n";
     int data_length = sizeof(message) + 1;
 
     write(m_fd, data, data_length);     //send message
     usleep((data_length + 25) * 100); //sleep enough to transmit the message
 }
 
-char* Serial::read(int buffer_length)
+char* Serial::Read(int buffer_length)
 {
     if(buffer_length < 1)
     {
@@ -51,7 +53,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
 
     if(tcgetattr(fd, &tty) != 0)
     {
-        printf("error %d from tcgetattr", errno);
+        // printf("error %d from tcgetattr", errno);
         return -1;
     }
 
@@ -69,7 +71,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
     tty.c_cc[VTIME] = 5;    //0.5 seconds read timeout
 
     tty.c_iflag &= ~(IXON | IXOFF | IXANY); //shut off xon/xoff ctrl
-    tty.c_cfoag |= (CLOCAL | CREAD);        //ignore modem controls,
+    tty.c_cflag |= (CLOCAL | CREAD);        //ignore modem controls,
                                             //enable reading
     tty.c_cflag &= ~(PARENB | PARODD);      //shut off parity
     tty.c_cflag |= parity;
@@ -78,7 +80,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
 
     if(tcsetattr(fd, TCSANOW, &tty) != 0)
     {
-        printf("error %d from tcsetattr", errno);
+        // printf("error %d from tcsetattr", errno);
         return -1;
     }
 
@@ -91,7 +93,7 @@ void Serial::set_blocking(int fd, int should_block)
     memset(&tty, 0, sizeof(tty));
     if(tcgetattr(fd, &tty) != 0)
     {
-        printf("error %d from tggetattr", errno);
+        // printf("error %d from tggetattr", errno);
         return;
     }
 
@@ -100,6 +102,6 @@ void Serial::set_blocking(int fd, int should_block)
 
     if(tcsetattr(fd, TCSANOW, &tty) != 0)
     {
-        printf("error %d setting term attributes", errno);
+        // printf("error %d setting term attributes", errno);
     }
 }

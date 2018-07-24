@@ -12,7 +12,7 @@ void Terminal::info(char* message)
 {
 }
 
-void Terminal::info(char* message)
+void Terminal::error(char* message)
 {
     std::cout << message << std::endl;
 }
