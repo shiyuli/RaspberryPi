@@ -10,8 +10,10 @@ int main()
     const char *port_name = "/dev/bus/usb/001/006"; //001~006
     serial->Open(port_name);
 
+    int number = 1;
+
     const byte message_to_send[5] = {
-        0x00, 0x00, 0x00, 0x01, (byte)'\n'
+        0x00, 0x00, 0x00, (byte)number, (byte)'\n'
     };
     serial->Write(message_to_send);
 
