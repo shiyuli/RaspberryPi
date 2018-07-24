@@ -13,7 +13,7 @@ bool Serial::Open(const char* port_name)
     m_fd = open(port_name, O_RDWR | O_NOCTTY | O_SYNC);
     if(m_fd < 0)
     {
-        // printf("error %d opening %s: %s", errno, port_name, strerror(errno));
+        printf("error %d opening %s: %s", errno, port_name, strerror(errno));
         return false;
     }
 
@@ -55,7 +55,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
 
     if(tcgetattr(fd, &tty) != 0)
     {
-        // printf("error %d from tcgetattr", errno);
+        printf("error %d from tcgetattr", errno);
         return -1;
     }
 
@@ -82,7 +82,7 @@ int Serial::set_interface_attribs(int fd, int speed, int parity)
 
     if(tcsetattr(fd, TCSANOW, &tty) != 0)
     {
-        // printf("error %d from tcsetattr", errno);
+        printf("error %d from tcsetattr", errno);
         return -1;
     }
 
@@ -95,7 +95,7 @@ void Serial::set_blocking(int fd, int should_block)
     memset(&tty, 0, sizeof(tty));
     if(tcgetattr(fd, &tty) != 0)
     {
-        // printf("error %d from tggetattr", errno);
+        printf("error %d from tggetattr", errno);
         return;
     }
 
@@ -104,6 +104,6 @@ void Serial::set_blocking(int fd, int should_block)
 
     if(tcsetattr(fd, TCSANOW, &tty) != 0)
     {
-        // printf("error %d setting term attributes", errno);
+        printf("error %d setting term attributes", errno);
     }
 }
