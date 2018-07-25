@@ -6,4 +6,4 @@
 int str_to_int(char* s);
 
 #else
-#endif
+#endif //UTILS_H_
