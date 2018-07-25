@@ -2,14 +2,19 @@
 
 void Console::info(char* message)
 {
-    color_t color = Color::green;
-    print(message, color);
+    print(message, Color::green);
+    reset();
 }
 
 void Console::error(char* message)
 {
-    color_t color = Color::red;
-    print(message, color);
+    print(message, Color::red);
+    reset();
+}
+
+void Console::reset()
+{
+    std::cout << Color::normal;
 }
 
 void Console::print(char* message, color_t color)

@@ -13,6 +13,7 @@ public:
     static void error(char* message);
 
 private:
+    static void reset();
     static void print(char* message, color_t color);
 };
 
