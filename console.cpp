@@ -2,20 +2,22 @@
 
 void Console::info(char* message)
 {
-     print(message, colors[0]);
+    color_t color = Color::green;
+    print(message, color);
 }
 
 void Console::error(char* message)
 {
-    print(message,colors[1]);
+    color_t color = Color::red;
+    print(message, color);
 }
 
-void Console::print(char* message,getColor s)
+void Console::print(char* message, color_t color)
 {
-    std::cout << s << message << std::endl;
+    std::cout << color << message << std::endl;
 }
 
-static std::ostream& normal(std::ostream& stream)
+std::ostream& Color::normal(std::ostream& stream)
 {
     stream << "\033[00m";
     return stream;

@@ -3,8 +3,8 @@
 #ifndef CONSOLE_H_
 #define CONSOLE_H_
 
-typedef std::ostream&(*getColor)(std::ostream&);
-// using func_t = std::ostream&(*)(std::ostream&);
+typedef std::ostream&(*color_t)(std::ostream&);
+// using color_t = std::ostream&(*)(std::ostream&);
 
 class Console
 {
@@ -29,6 +29,6 @@ public:
     static std::ostream& cyan(std::ostream& stream);
     static std::ostream& white(std::ostream& stream);
 };
-getColor colors[2] = { Color::normal, Color::red };
 
+#else
 #endif //CONSOLE_H_

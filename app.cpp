@@ -4,7 +4,7 @@
 
 bool test_serial(Serial* serial)
 {
-    std::cout << "run test" << std::endl;
+    std::cout << "run test_serial" << std::endl;
 
     // int number;
     char convert_buffer[100];
@@ -29,16 +29,18 @@ bool test_serial(Serial* serial)
     //     std::cout << "receiving message from serial: " << received_message << std::endl;
     // }
 
-    std::cout << "end test" << std::endl;
-
+    std::cout << "end test_serial" << std::endl;
     return true;
 }
 
-bool test_console(Console* console)
+bool test_console()
 {
-    console->info("testing console->info");
-    console->error("testing console->error");
+    std::cout << "start test_console" << std::endl;
 
+    Console::info("testing console->info");
+    Console::error("testing console->error");
+
+    std::cout << "end test_console" << std::endl;
     return true;
 }
 
@@ -66,9 +68,6 @@ int main()
 
     delete serial;
     serial = NULL;
-
-    delete console;
-    console = NULL;
 
     std::cout << "end app" << std::endl;
     return 0;
