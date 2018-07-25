@@ -2,17 +2,17 @@
 
 void Console::info(char* message)
 {
-    print(message, Color::colors[0]);
+     print(message, colors[0]);
 }
 
 void Console::error(char* message)
 {
-    print(message, Color::colors[1]);
+    print(message,colors[1]);
 }
 
-void Console::print(char* message, std::ostream& color)
+void Console::print(char* message,getColor s)
 {
-    std::cout << color << message << std::endl;
+    std::cout << s << message << std::endl;
 }
 
 static std::ostream& normal(std::ostream& stream)
