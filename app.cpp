@@ -1,28 +1,22 @@
 #include <iostream>
 #include "serial_communication.h"
 #include "console.h"
+#include "commands.h"
+
+#define DEBUG
+#define SHOW_NUMBER_AUTO -1 //show Arduino numbers auto
+
+bool test_serial(Serial* serial);
+bool test_console();
+void print_logo();
+bool parse_command();
+void show_number(int number);
 
 bool test_serial(Serial* serial)
 {
     std::cout << "run test_serial" << std::endl;
 
-    // int number;
-    char convert_buffer[100];
-
-    //show Arduino numbers auto
-    const byte message_to_send[5] = {
-        0x00, 0x01, 0x00, 0x00, (byte)'\n'
-    };
-    serial->Write(message_to_send);
-
-    std::cout << "sending message to serial:" << std::endl;
-    for(int i(0); i < 4; ++i)
-    {
-        sprintf(convert_buffer, "%x", message_to_send[i]);
-        std::cout << convert_buffer << std::endl;
-    }
-    std::cout << std::endl;
-
+    
     // for(;;)
     // {
     //     char *received_message = serial->Read(100);
@@ -44,24 +38,96 @@ bool test_console()
     return true;
 }
 
+void print_logo()
+{
+    Console::println("", ConsoleColor::white);
+}
+
+bool parse_command()
+{
+    char *commands[2] = { new char, new char };
+    std::cin >> commands[0];
+    std::cin >> commands[1];
+
+    //std::cout << "command: " << command << std::endl;
+    //std::cout << "command len: " << sizeof(command) << std::endl;
+
+    if(strcmp(commands[0], CMD_SHOW_NUMBER) == 0)
+    {
+        if(strcmp(commands[1], ARG_AUTO) == 0)
+        {
+            show_number(SHOW_NUMBER_AUTO);
+        }
+        else
+        {
+            show_number((int)commands[1]);
+        }
+    }
+
+    return true;
+}
+
+void show_number(int number)
+{
+    byte message_to_send[5] = {
+        0x00, 0xFF, 0xFF, 0xFF, (byte)'\n'
+    };
+
+    if(number == SHOW_NUMBER_AUTO)
+    {
+        message_to_send[1] = 0x01;
+    }
+    else
+    {
+        message_to_send[1] = 0x00;
+    }
+
+    message_to_send[3] = (byte)number;
+
+    serial->Write(message_to_send);
+
+    // Console::info("sending message to serial:");
+    // char convert_buffer[100];
+    // for(int i(0); i < 4; ++i)
+    // {
+    //     sprintf(convert_buffer, "%x", message_to_send[i]);
+    //     std::cout << convert_buffer << std::endl;
+    // }
+    // std::cout << std::endl;
+}
+
 int main()
 {
+#ifdef DEBUG
     std::cout << "run app" << std::endl;
+#endif
+    print_logo();
 
     Serial *serial = new Serial();
     const char *port_name = "/dev/ttyACM0";
     serial->Open(port_name);
 
+#ifdef DEBUG
     if(!test_serial(serial))
     {
-        std::cout << "test_serial failed" << std::endl;
+        std::cout << ConsoleColor::red << "test_serial failed" << std::endl;
         return -1;
     }
 
     if(!test_console())
     {
-        std::cout << "test_console failed" << std::endl;
+        std::cout << ConsoleColor::red << "test_console failed" << std::endl;
         return -1;
+    }
+#endif
+
+    for(;;)
+    {
+        Console::print("command>");
+        if(!parse_command())
+        {
+            break;
+        }
     }
 
     serial->Close();
@@ -69,6 +135,6 @@ int main()
     delete serial;
     serial = NULL;
 
-    std::cout << "end app" << std::endl;
+    Console::debug("end app");
     return 0;
 }

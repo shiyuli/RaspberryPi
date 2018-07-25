@@ -11,13 +11,17 @@ class Console
 public:
     static void info(char* message);
     static void error(char* message);
+    static void debug(char* message);
+    static void print(char* message);
+    static void print(char* message, color_t color);
+    static void println(char* message);
+    static void println(char* message, color_t color);
 
 private:
     static void reset();
-    static void print(char* message, color_t color);
 };
 
-class Color
+class ConsoleColor
 {
 public:
     static std::ostream& normal(std::ostream& stream);
