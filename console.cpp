@@ -1,18 +1,18 @@
 #include "console.h"
 
-void Console::info(char* message)
+void Console::info(const char* message)
 {
     println(message, ConsoleColor::green);
     reset();
 }
 
-void Console::error(char* message)
+void Console::error(const char* message)
 {
     println(message, ConsoleColor::red);
     reset();
 }
 
-void Console::debug(char* message)
+void Console::debug(const char* message)
 {
 #ifdef DEBUG
     println(message, ConsoleColor::yellow);
@@ -20,23 +20,23 @@ void Console::debug(char* message)
 #endif
 }
 
-void Console::print(char* message)
+void Console::print(const char* message)
 {
     print(message, ConsoleColor::normal);
 }
 
-void Console::print(char* message, color_t color)
+void Console::print(const char* message, color_t color)
 {
     std::cout << color << message;
     reset();
 }
 
-void Console::println(char* message)
+void Console::println(const char* message)
 {
     println(message, ConsoleColor::normal);
 }
 
-void Console::println(char* message, color_t color)
+void Console::println(const char* message, color_t color)
 {
     std::cout << color << message << std::endl;
     reset();

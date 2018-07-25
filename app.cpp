@@ -2,10 +2,10 @@
 #include "serial_communication.h"
 #include "console.h"
 #include "commands.h"
+#include "utils.h"
 
 #define DEBUG
 #define SHOW_NUMBER_AUTO -1 //show Arduino numbers auto
-#define longstring(a, b) a##b
 
 Serial *serial;
 
@@ -42,15 +42,14 @@ bool test_console()
 
 void print_logo()
 {
-    const char *logo = longstring(
+    const char *logo =
     " ____               _       _             \n"
     "|  _ \ __ _ ___  __| |_   _(_)_ __   ___  \n"
     "| |_) / _` / __|/ _` | | | | | '_ \ / _ \ \n"
     "|  _ < (_| \__ \ (_| | |_| | | | | | (_) |\n"
     "|_| \_\__,_|___/\__,_|\__,_|_|_| |_|\___/ \n"
-    "                                          \n"
-    );
-    Console::println(logo, ConsoleColor::white);
+    "                                          \n";
+    Console::println(logo);
 }
 
 bool parse_command()
@@ -70,7 +69,7 @@ bool parse_command()
         }
         else
         {
-            show_number((int)commands[1]);
+            show_number(str_to_int(commands[1]));
         }
     }
 

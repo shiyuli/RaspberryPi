@@ -9,13 +9,13 @@ typedef std::ostream&(*color_t)(std::ostream&);
 class Console
 {
 public:
-    static void info(char* message);
-    static void error(char* message);
-    static void debug(char* message);
-    static void print(char* message);
-    static void print(char* message, color_t color);
-    static void println(char* message);
-    static void println(char* message, color_t color);
+    static void info(const char* message);
+    static void error(const char* message);
+    static void debug(const char* message);
+    static void print(const char* message);
+    static void print(const char* message, color_t color);
+    static void println(const char* message);
+    static void println(const char* message, color_t color);
 
 private:
     static void reset();
