@@ -75,15 +75,15 @@ void Serial::Write(const byte message[5])
     // strcat(data, '\n');
     // int data_length = sizeof(message);
 
-    write(m_fd, message, 5);     //send message
-    usleep((5 + 25) * 100); //sleep enough to transmit the message
+    write(m_fd, message, 5); //send message
+    usleep((5 + 25) * 100);  //sleep enough to transmit the message
 }
 
 char* Serial::Read(int buffer_length)
 {
     if(buffer_length < 1)
     {
-        return NULL;
+        return "";
     }
 
     char message[buffer_length];
