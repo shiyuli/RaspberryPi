@@ -5,6 +5,9 @@
 
 #define DEBUG
 #define SHOW_NUMBER_AUTO -1 //show Arduino numbers auto
+#define longstring(a, b) a##b
+
+Serial *serial;
 
 bool test_serial(Serial* serial);
 bool test_console();
@@ -15,7 +18,6 @@ void show_number(int number);
 bool test_serial(Serial* serial)
 {
     std::cout << "run test_serial" << std::endl;
-
     
     // for(;;)
     // {
@@ -40,7 +42,15 @@ bool test_console()
 
 void print_logo()
 {
-    Console::println("", ConsoleColor::white);
+    const char *logo = longstring(
+    " ____               _       _             \n"
+    "|  _ \ __ _ ___  __| |_   _(_)_ __   ___  \n"
+    "| |_) / _` / __|/ _` | | | | | '_ \ / _ \ \n"
+    "|  _ < (_| \__ \ (_| | |_| | | | | | (_) |\n"
+    "|_| \_\__,_|___/\__,_|\__,_|_|_| |_|\___/ \n"
+    "                                          \n"
+    );
+    Console::println(logo, ConsoleColor::white);
 }
 
 bool parse_command()
@@ -103,7 +113,7 @@ int main()
 #endif
     print_logo();
 
-    Serial *serial = new Serial();
+    serial = new Serial();
     const char *port_name = "/dev/ttyACM0";
     serial->Open(port_name);
 
