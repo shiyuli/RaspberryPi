@@ -1,4 +1,4 @@
-#include "terminal.h"
+#include "console.h"
 
 void Console::info(char* message)
 {
