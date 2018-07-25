@@ -2,12 +2,12 @@
 
 void Console::info(char* message)
 {
-    print(message, colors[0]);
+    print(message, Color::colors[0]);
 }
 
 void Console::error(char* message)
 {
-    print(message, colors[1]);
+    print(message, Color::colors[1]);
 }
 
 void Console::print(char* message, std::ostream& color)

@@ -5,8 +5,6 @@
 
 typedef std::ostream&(*getColor)(std::ostream&);
 
-getColor colors[2] = { normal, red };
-
 class Console
 {
 public:
@@ -29,6 +27,7 @@ public:
     static std::ostream& magenta(std::ostream& stream);
     static std::ostream& cyan(std::ostream& stream);
     static std::ostream& white(std::ostream& stream);
+    static getColor colors[2] = { normal, red };
 };
 
 #endif //CONSOLE_H_
