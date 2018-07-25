@@ -13,7 +13,7 @@ public:
     static void error(char* message);
 
 private:
-    static void print(char*, getColor);
+    static void print(char* message, color_t color);
 };
 
 class Color
