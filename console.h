@@ -1,18 +1,26 @@
 #include <iostream>
 
+#ifndef CONSOLE_H_
+#define CONSOLE_H_
+
+typedef std::ostream&(*getColor)(std::ostream&);
+
+getColor colors[2] = { normal, red };
+
 class Console
 {
 public:
-    void info(char* message);
-    void error(char* message);
+    static void info(char* message);
+    static void error(char* message);
 
 private:
-    void print(char* message, std::ostream& color);
-} *console;
+    static void print(char* message, std::ostream& color);
+};
 
 class Color
 {
 public:
+    static std::ostream& normal(std::ostream& stream);
     static std::ostream& grey(std::ostream& stream);
     static std::ostream& red(std::ostream& stream);
     static std::ostream& green(std::ostream& stream);
@@ -21,4 +29,6 @@ public:
     static std::ostream& magenta(std::ostream& stream);
     static std::ostream& cyan(std::ostream& stream);
     static std::ostream& white(std::ostream& stream);
-} color;
+};
+
+#endif //CONSOLE_H_

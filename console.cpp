@@ -2,17 +2,23 @@
 
 void Console::info(char* message)
 {
-    print(message, color::white);
+    print(message, colors[0]);
 }
 
 void Console::error(char* message)
 {
-    print(message, color::red);
+    print(message, colors[1]);
 }
 
 void Console::print(char* message, std::ostream& color)
 {
     std::cout << color << message << std::endl;
+}
+
+static std::ostream& normal(std::ostream& stream)
+{
+    stream << "\033[00m";
+    return stream;
 }
 
 std::ostream& Color::grey(std::ostream& stream)
