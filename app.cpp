@@ -58,7 +58,7 @@ int main()
         return -1;
     }
 
-    if(!test_console(console))
+    if(!test_console())
     {
         std::cout << "test_console failed" << std::endl;
         return -1;
